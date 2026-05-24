@@ -2,8 +2,12 @@ from flask import Flask, render_template, request, redirect, send_file
 from extractors.ber import extract_ber_jobs
 from extractors.web3 import extract_web3_jobs
 from file import save_to_file
+from flask_frozen import Freezer
 
 app = Flask("Jobscapper")
+freezer = Freezer(app)
+
+
 
 db = {}
 
@@ -36,4 +40,8 @@ def export():
     save_to_file(keyword, db[keyword])
     return send_file(f"{keyword}.csv", as_attachment=True)
 
-app.run("0.0.0.0")
+
+if __name__ == "__main__":
+    freezer.freeze()
+else:
+    app.run("0.0.0.0")
